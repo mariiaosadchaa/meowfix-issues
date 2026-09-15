@@ -1,0 +1,25 @@
+name: Sync Issue to Private Repo
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  copy-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Issue in Private Repo
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.SYNC_ISSUES_TOKEN }}
+          repo: owner/private-repo-name
+          title: '[Public #${{ github.event.issue.number }}] ${{ github.event.issue.title }}'
+          body: |
+            **Автор:** @${{ github.event.issue.user.login }}
+            **Оригінальна Issue:** ${{ github.event.issue.html_url }}
+
+            ---
+
+            ${{ github.event.issue.body }}
+          labels: |
+            from-public
