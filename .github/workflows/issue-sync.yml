@@ -15,8 +15,9 @@ jobs:
           repo: owner/private-repo-name
           title: '[Public #${{ github.event.issue.number }}] ${{ github.event.issue.title }}'
           body: |
+            PUBLIC_ISSUE_NUMBER:${{ github.event.issue.number }}
             **Автор:** @${{ github.event.issue.user.login }}
-            **Оригінальна Issue:** ${{ github.event.issue.html_url }}
+            **Оригінал:** ${{ github.event.issue.html_url }}
 
             ---
 
