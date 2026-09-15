@@ -1,0 +1,43 @@
+name: Feature Request
+description: Запропонувати нову ідею або покращення
+title: "[FEATURE]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Дякуємо за вашу ідею! Будь ласка, опишіть функціонал детальніше.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Яку проблему це вирішує?
+      description: З якою незручністю або обмеженням ви стикаєтеся?
+      placeholder: Мені бракує можливості...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Пропоноване рішення
+      description: Як саме має працювати новий функціонал?
+      placeholder: Було б чудово додати кнопку/опцію...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Альтернативні варіанти
+      description: Чи розглядали ви інші шляхи вирішення цього завдання?
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Додатковий контекст або скріншоти
+      description: Сюди можна прикріпити макети, референси чи приклади.
+    validations:
+      required: false
