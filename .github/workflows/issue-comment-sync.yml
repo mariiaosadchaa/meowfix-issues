@@ -1,0 +1,45 @@
+name: Sync Public Comments to Private Repo
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  sync-comment:
+    # Запускаємо тільки якщо коментар написаний в Issue (а не в PR) 
+    # і якщо його написав не бот (щоб уникнути нескінченних циклів)
+    if: ${{ !github.event.issue.pull_request && !github.event.comment.user.bot }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find and Comment on Private Issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.SYNC_ISSUES_TOKEN }}
+          script: |
+            const publicIssueNumber = context.payload.issue.number;
+            const commentAuthor = context.payload.comment.user.login;
+            const commentBody = context.payload.comment.body;
+
+            const privateOwner = 'mariiaosadchaa';         // Замініть на ваш логін/орг
+            const privateRepo = 'meowfix';   // Замініть на назву приватного репо
+
+            // 1. Шукаємо відповідну Issue у приватному репо за тегом
+            const searchQuery = `repo:${privateOwner}/${privateRepo} is:issue "PUBLIC_ISSUE_NUMBER:${publicIssueNumber}"`;
+            const searchResult = await github.rest.search.issuesAndPullRequests({
+              q: searchQuery
+            });
+
+            if (searchResult.data.total_count === 0) {
+              console.log(`Приватну Issue для Public #${publicIssueNumber} не знайдено.`);
+              return;
+            }
+
+            const privateIssueNumber = searchResult.data.items[0].number;
+
+            // 2. Додаємо коментар у приватну Issue
+            await github.rest.issues.createComment({
+              owner: privateOwner,
+              repo: privateRepo,
+              issue_number: privateIssueNumber,
+              body: `**Коментар від @${commentAuthor} з публічної Issue:**\n\n${commentBody}`
+            });
