@@ -12,7 +12,7 @@ jobs:
         uses: actions-ecosystem/action-create-issue@v1
         with:
           github_token: ${{ secrets.SYNC_ISSUES_TOKEN }}
-          repo: owner/private-repo-name
+          repo: mariiaosadchaa/meowfix
           title: '[Public #${{ github.event.issue.number }}] ${{ github.event.issue.title }}'
           body: |
             PUBLIC_ISSUE_NUMBER:${{ github.event.issue.number }}
